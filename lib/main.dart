@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:math';
 import 'newpage.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -102,12 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
           .ref('level$level/$fileName.mp3')
           .getDownloadURL()
           .then((value) async => downloadURLs[j] = value);
-
-      // String fileName = listMusicName[j - 1].toString().trim();
-      // await firebase_storage.FirebaseStorage.instance
-      //     .ref('level$level/$fileName.mp3')
-      //     .getDownloadURL()
-      //     .then((value) async => downloadURLs[j - 1] = value);
     }
 
     loadFile();
@@ -131,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
     listMusicName = [];
     fetchMusicName();
     ansindex();
+    setState(() {});
   }
 
   //解答と正解の添字を比較
