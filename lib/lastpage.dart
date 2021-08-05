@@ -10,6 +10,7 @@ class LastPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("おしまい"),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Text("$question問中$countCorrect問正解！"),

@@ -7,6 +7,7 @@ class NextPageCorrect extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("正解!"),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: ElevatedButton(
@@ -34,6 +35,7 @@ class NextPageWrong extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("不正解!"),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: ElevatedButton(

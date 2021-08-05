@@ -162,6 +162,11 @@ class _MyHomePageState extends State<MyHomePage> {
         player0.play(downloadURLs[0]);
         countTapping++;
         timePlayMusic.start();
+        print(timePlayMusic.elapsed.inSeconds);
+        player0.onPlayerCompletion.listen((event) {
+          timePlayMusic.stop();
+          print(timePlayMusic.elapsed.inSeconds);
+        });
       }
     } else if (currentPlayerNumber == 1) {
       if (player1.state == PlayerState.STOPPED ||
@@ -169,6 +174,11 @@ class _MyHomePageState extends State<MyHomePage> {
         player1.play(downloadURLs[1]);
         countTapping++;
         timePlayMusic.start();
+        // print(timePlayMusic.elapsed.inSeconds);
+        player1.onPlayerCompletion.listen((event) {
+          timePlayMusic.stop();
+          // print(timePlayMusic.elapsed.inSeconds);
+        });
       }
     } else if (currentPlayerNumber == 2) {
       if (player2.state == PlayerState.STOPPED ||
@@ -176,6 +186,11 @@ class _MyHomePageState extends State<MyHomePage> {
         player2.play(downloadURLs[2]);
         countTapping++;
         timePlayMusic.start();
+        // print(timePlayMusic.elapsed.inSeconds);
+        player2.onPlayerCompletion.listen((event) {
+          timePlayMusic.stop();
+          // print(timePlayMusic.elapsed.inSeconds);
+        });
       }
     } else if (currentPlayerNumber == 3) {
       if (player3.state == PlayerState.STOPPED ||
@@ -183,6 +198,11 @@ class _MyHomePageState extends State<MyHomePage> {
         player3.play(downloadURLs[3]);
         countTapping++;
         timePlayMusic.start();
+        // print(timePlayMusic.elapsed.inSeconds);
+        player3.onPlayerCompletion.listen((event) {
+          timePlayMusic.stop();
+          // print(timePlayMusic.elapsed.inSeconds);
+        });
       }
     } else {
       if (player4.state == PlayerState.STOPPED ||
@@ -190,6 +210,11 @@ class _MyHomePageState extends State<MyHomePage> {
         player4.play(downloadURLs[4]);
         countTapping++;
         timePlayMusic.start();
+        // print(timePlayMusic.elapsed.inSeconds);
+        player4.onPlayerCompletion.listen((event) {
+          timePlayMusic.stop();
+          // print(timePlayMusic.elapsed.inSeconds);
+        });
       }
     }
 
@@ -219,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //リビルドするかどうか
   void again() {
     question++;
-    if (question > 4) {
+    if (question > 2) {
       uploadlogdata();
       Navigator.push(
           context,
@@ -299,6 +324,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    //ログを有効にする？
+    // AudioPlayer.logEnabled = true;
     fetchMusicName();
     ansindex();
   }
@@ -310,6 +337,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text("Loading..."),
+          automaticallyImplyLeading: false,
         ),
         body: Center(
           child: Column(
@@ -328,9 +356,9 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: Text("Music Memory"),
-        ),
+            centerTitle: true,
+            title: Text("Music Memory"),
+            automaticallyImplyLeading: false),
         body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
               Widget>[
@@ -430,15 +458,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageCorrect(),
-                        ));
+                        )).then((value) => again());
                   } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageWrong(),
-                        ));
+                        )).then((value) => again());
                   }
-                  again();
+                  // again();
                 },
               ),
               ElevatedButton(
@@ -459,15 +487,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageCorrect(),
-                        ));
+                        )).then((value) => again());
                   } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageWrong(),
-                        ));
+                        )).then((value) => again());
                   }
-                  again();
+                  // again();
                 },
               ),
               ElevatedButton(
@@ -488,15 +516,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageCorrect(),
-                        ));
+                        )).then((value) => again());
                   } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageWrong(),
-                        ));
+                        )).then((value) => again());
                   }
-                  again();
+                  // again();
                 },
               ),
               ElevatedButton(
@@ -517,16 +545,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageCorrect(),
-                        ));
+                        )).then((value) => again());
                   } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NextPageWrong(),
-                        ));
+                        )).then((value) => again());
                   }
 
-                  again();
+                  // again();
                 },
               ),
             ]),
