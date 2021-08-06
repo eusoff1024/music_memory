@@ -76,6 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool startAns = false;
   //ローディング中かどうか
   bool isLoading = true;
+  //
+  int doneSeturl = 0;
 
   //ドキュメント一覧を取得
   Future<void> fetchMusicName() async {
@@ -111,22 +113,71 @@ class _MyHomePageState extends State<MyHomePage> {
           .then((value) async => downloadURLs[j] = value);
     }
 
-    loadFile();
+    // loadFile();
+
+    loadFile(0);
+    loadFile(1);
+    loadFile(2);
+    loadFile(3);
+    loadFile(4);
+
     setState(() {});
   }
 
   //audioplayerの準備
-  Future<void> loadFile() async {
-    await player0.setUrl(downloadURLs[0]);
-    await player1.setUrl(downloadURLs[1]);
-    await player2.setUrl(downloadURLs[2]);
-    await player3.setUrl(downloadURLs[3]);
-    await player4.setUrl(downloadURLs[4]);
+  Future<void> loadFile(int i) async {
+    switch (i) {
+      case 0:
+        await player0.setUrl(downloadURLs[0]);
+        doneSeturl++;
+        print("0");
+        break;
+      case 1:
+        await player1.setUrl(downloadURLs[1]);
+        doneSeturl++;
+        print("1");
+        break;
+      case 2:
+        await player2.setUrl(downloadURLs[2]);
+        doneSeturl++;
+        print("2");
+        break;
+      case 3:
+        await player3.setUrl(downloadURLs[3]);
+        doneSeturl++;
+        print("3");
+        break;
+      case 4:
+        await player4.setUrl(downloadURLs[4]);
+        doneSeturl++;
+        print("4");
+        break;
+    }
 
-    setState(() {
-      isLoading = false;
-    });
+    if (doneSeturl == 5) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
+
+  // //audioplayerの準備
+  // Future<void> loadFile() async {
+  //   await player0.setUrl(downloadURLs[0]);
+  //   print("0");
+  //   await player1.setUrl(downloadURLs[1]);
+  //   print("1");
+  //   await player2.setUrl(downloadURLs[2]);
+  //   print("2");
+  //   await player3.setUrl(downloadURLs[3]);
+  //   print("3");
+  //   await player4.setUrl(downloadURLs[4]);
+  //   print("4");
+
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   //答えの添字をランダムで取得(downloadURLsから)
   void ansindex() {
@@ -244,7 +295,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //リビルドするかどうか
   void again() {
     question++;
-    if (question > 2) {
+    if (question > 4) {
       uploadlogdata();
       Navigator.push(
           context,
@@ -261,6 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
     downloadURLs = ['null', 'null', 'null', 'null', 'null'];
     listMusicName.clear();
     isLoading = true;
+    doneSeturl = 0;
     fetchMusicName();
     ansindex();
     setState(() {});
