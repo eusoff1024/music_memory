@@ -8,10 +8,10 @@ class LastPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("おしまい"),
-        automaticallyImplyLeading: false,
-      ),
+      // appBar: AppBar(
+      //   title: Text("おしまい"),
+      //   automaticallyImplyLeading: false,
+      // ),
       body: Center(
         child: Text("$question問中$countCorrect問正解！"),
       ),

@@ -5,10 +5,10 @@ class NextPageCorrect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("正解!"),
-        automaticallyImplyLeading: false,
-      ),
+      // appBar: AppBar(
+      //   title: Text("正解!"),
+      //   automaticallyImplyLeading: false,
+      // ),
       body: Center(
         child: ElevatedButton(
           child: Icon(Icons.check_rounded),
@@ -33,10 +33,10 @@ class NextPageWrong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("不正解!"),
-        automaticallyImplyLeading: false,
-      ),
+      // appBar: AppBar(
+      //   title: Text("不正解!"),
+      //   automaticallyImplyLeading: false,
+      // ),
       body: Center(
         child: ElevatedButton(
           child: Icon(Icons.clear_rounded),

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dart:math';
 import 'newpage.dart';
 import 'lastpage.dart';
@@ -65,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
   AudioPlayer player3 = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
   AudioPlayer player4 = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
   //再生した回数
-  int countTapping = 0;
+  // int countTapping = 0;
+  var countTapping = [0, 0, 0, 0, 0];
   //回答した日時
   DateTime todayis = DateTime.now();
   //音楽再生時間を取得
@@ -76,8 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool startAns = false;
   //ローディング中かどうか
   bool isLoading = true;
-  //
+  //各playerがsetUrl完了したかどうか
   int doneSeturl = 0;
+  //画面の高さを取得
+  // double width = MediaQuery.of(context).size.width;
 
   //ドキュメント一覧を取得
   Future<void> fetchMusicName() async {
@@ -115,11 +119,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // loadFile();
 
-    loadFile(0);
-    loadFile(1);
-    loadFile(2);
-    loadFile(3);
-    loadFile(4);
+    for (int i = 0; i < 5; i++) {
+      loadFile(i);
+    }
 
     setState(() {});
   }
@@ -130,29 +132,30 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         await player0.setUrl(downloadURLs[0]);
         doneSeturl++;
-        print("0");
+        // print("0");
         break;
       case 1:
         await player1.setUrl(downloadURLs[1]);
         doneSeturl++;
-        print("1");
+        // print("1");
         break;
       case 2:
         await player2.setUrl(downloadURLs[2]);
         doneSeturl++;
-        print("2");
+        // print("2");
         break;
       case 3:
         await player3.setUrl(downloadURLs[3]);
         doneSeturl++;
-        print("3");
+        // print("3");
         break;
       case 4:
         await player4.setUrl(downloadURLs[4]);
         doneSeturl++;
-        print("4");
+        // print("4");
         break;
     }
+    // Future.wait(futures)
 
     if (doneSeturl == 5) {
       setState(() {
@@ -160,24 +163,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     }
   }
-
-  // //audioplayerの準備
-  // Future<void> loadFile() async {
-  //   await player0.setUrl(downloadURLs[0]);
-  //   print("0");
-  //   await player1.setUrl(downloadURLs[1]);
-  //   print("1");
-  //   await player2.setUrl(downloadURLs[2]);
-  //   print("2");
-  //   await player3.setUrl(downloadURLs[3]);
-  //   print("3");
-  //   await player4.setUrl(downloadURLs[4]);
-  //   print("4");
-
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
 
   //答えの添字をランダムで取得(downloadURLsから)
   void ansindex() {
@@ -196,6 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (timePlayMusic.isRunning) {
       timePlayMusic.stop();
+      print(timePlayMusic.elapsed.inSeconds);
     }
     if (!startAns) {
       setState(() {
@@ -211,65 +197,69 @@ class _MyHomePageState extends State<MyHomePage> {
       if (player0.state == PlayerState.STOPPED ||
           player0.state == PlayerState.COMPLETED) {
         player0.play(downloadURLs[0]);
-        countTapping++;
+        // countTapping++;
+        countTapping[0]++;
         timePlayMusic.start();
-        print(timePlayMusic.elapsed.inSeconds);
-        player0.onPlayerCompletion.listen((event) {
-          timePlayMusic.stop();
-          print(timePlayMusic.elapsed.inSeconds);
-        });
       }
     } else if (currentPlayerNumber == 1) {
       if (player1.state == PlayerState.STOPPED ||
           player1.state == PlayerState.COMPLETED) {
         player1.play(downloadURLs[1]);
-        countTapping++;
+        // countTapping++;
+        countTapping[1]++;
         timePlayMusic.start();
-        // print(timePlayMusic.elapsed.inSeconds);
-        player1.onPlayerCompletion.listen((event) {
-          timePlayMusic.stop();
-          // print(timePlayMusic.elapsed.inSeconds);
-        });
       }
     } else if (currentPlayerNumber == 2) {
       if (player2.state == PlayerState.STOPPED ||
           player2.state == PlayerState.COMPLETED) {
         player2.play(downloadURLs[2]);
-        countTapping++;
+        // countTapping++;
+        countTapping[2]++;
         timePlayMusic.start();
-        // print(timePlayMusic.elapsed.inSeconds);
-        player2.onPlayerCompletion.listen((event) {
-          timePlayMusic.stop();
-          // print(timePlayMusic.elapsed.inSeconds);
-        });
       }
     } else if (currentPlayerNumber == 3) {
       if (player3.state == PlayerState.STOPPED ||
           player3.state == PlayerState.COMPLETED) {
         player3.play(downloadURLs[3]);
-        countTapping++;
+        // countTapping++;
+        countTapping[3]++;
         timePlayMusic.start();
-        // print(timePlayMusic.elapsed.inSeconds);
-        player3.onPlayerCompletion.listen((event) {
-          timePlayMusic.stop();
-          // print(timePlayMusic.elapsed.inSeconds);
-        });
       }
     } else {
       if (player4.state == PlayerState.STOPPED ||
           player4.state == PlayerState.COMPLETED) {
         player4.play(downloadURLs[4]);
-        countTapping++;
+        // countTapping++;
+        countTapping[4]++;
         timePlayMusic.start();
-        // print(timePlayMusic.elapsed.inSeconds);
-        player4.onPlayerCompletion.listen((event) {
-          timePlayMusic.stop();
-          // print(timePlayMusic.elapsed.inSeconds);
-        });
       }
     }
 
     setState(() {});
+  }
+
+  //playerがcompletionだったらストップウォッチを停止させる
+  void playerIsComplation() {
+    print(timePlayMusic.elapsed.inSeconds);
+    player0.onPlayerCompletion.listen((event) {
+      timePlayMusic.stop();
+      // print(timePlayMusic.elapsed.inSeconds);
+    });
+    print(timePlayMusic.elapsed.inSeconds);
+    player2.onPlayerCompletion.listen((event) {
+      timePlayMusic.stop();
+      // print(timePlayMusic.elapsed.inSeconds);
+    });
+    print(timePlayMusic.elapsed.inSeconds);
+    player3.onPlayerCompletion.listen((event) {
+      timePlayMusic.stop();
+      // print(timePlayMusic.elapsed.inSeconds);
+    });
+    print(timePlayMusic.elapsed.inSeconds);
+    player4.onPlayerCompletion.listen((event) {
+      timePlayMusic.stop();
+      // print(timePlayMusic.elapsed.inSeconds);
+    });
   }
 
   //解答と正解の添字を比較
@@ -336,7 +326,6 @@ class _MyHomePageState extends State<MyHomePage> {
           'sumAns': question - 1,
           'sumCorrectAns': countCorrect,
           'countTapping': countTapping,
-          'avgTapping': countTapping / (question - 1),
           'ansDay': todayis,
           'timePlayMusic': timePlayMusic.elapsed.inSeconds,
           'timeAns': timeAns.elapsed.inSeconds
@@ -361,7 +350,6 @@ class _MyHomePageState extends State<MyHomePage> {
           'sumAns': question - 1,
           'sumCorrectAns': countCorrect,
           'countTapping': countTapping,
-          'avgTapping': countTapping / (question - 1),
           'ansDay': todayis,
           'timePlayMusic': timePlayMusic.elapsed.inSeconds,
           'timeAns': timeAns.elapsed.inSeconds
@@ -372,252 +360,361 @@ class _MyHomePageState extends State<MyHomePage> {
     print("DONE");
   }
 
+  //問題データを表示するwidget
+  Widget _questionArea(double h) {
+    return Container(
+      // margin: EdgeInsets.all(8.0),
+      alignment: Alignment(0, 0),
+      height: h,
+
+      child: new SizedBox(
+        height: h * 0.5,
+        width: h * 0.5,
+        child: ElevatedButton(
+          child: Icon(Icons.play_arrow),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.blue,
+            onPrimary: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () {
+            stopMusic();
+            playMusic(0);
+          },
+        ),
+      ),
+    );
+  }
+
+  //説明文を表示する
+  Widget _questionTextArea() {
+    return Container(
+      // margin: EdgeInsets.all(8.0),
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text("同じものはどれ？"),
+        ],
+      ),
+    );
+  }
+
+  //回答の音楽データの選択肢を表示する
+  Widget _ansMusicArea(double h, double w) {
+    return Container(
+        color: Colors.green,
+        // margin: EdgeInsets.all(8.0),
+        // alignment: Alignment(0, 0),
+        height: h,
+        width: w,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // children: [
+              SizedBox(
+                height: h / 4,
+                width: w / 4,
+                child: ElevatedButton(
+                  child: Text("A"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.yellow,
+                    onPrimary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    stopMusic();
+                    playMusic(1);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: h / 4,
+                width: w / 4,
+                child: ElevatedButton(
+                  child: Text("B"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.lightGreen,
+                    onPrimary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    stopMusic();
+                    playMusic(2);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: h / 4,
+                width: w / 4,
+                child: ElevatedButton(
+                  child: Text("C"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.teal,
+                    onPrimary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    stopMusic();
+                    playMusic(3);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: h / 4,
+                width: h / 4,
+                child: ElevatedButton(
+                  child: Text("D"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    onPrimary: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    stopMusic();
+                    playMusic(4);
+                  },
+                ),
+              ),
+              // ]
+              // ),
+            ]));
+  }
+
+  //回答の選択ボタンを表示する
+  Widget _ansSelectArea(double h, double w) {
+    return Container(
+      height: h,
+      width: w,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ElevatedButton(
+            child: Text("A"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.yellow,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              stopMusic();
+              timeAns.stop();
+              startAns = false;
+              if (judge(0)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageCorrect(),
+                    )).then((value) => again());
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageWrong(),
+                    )).then((value) => again());
+              }
+              // again();
+            },
+          ),
+          ElevatedButton(
+            child: Text("B"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.lightGreen,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              stopMusic();
+              timeAns.stop();
+              startAns = false;
+              if (judge(1)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageCorrect(),
+                    )).then((value) => again());
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageWrong(),
+                    )).then((value) => again());
+              }
+              // again();
+            },
+          ),
+          ElevatedButton(
+            child: Text("C"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.teal,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              stopMusic();
+              timeAns.stop();
+              startAns = false;
+              if (judge(2)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageCorrect(),
+                    )).then((value) => again());
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageWrong(),
+                    )).then((value) => again());
+              }
+              // again();
+            },
+          ),
+          ElevatedButton(
+            child: Text("D"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () {
+              stopMusic();
+              timeAns.stop();
+              startAns = false;
+              if (judge(3)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageCorrect(),
+                    )).then((value) => again());
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextPageWrong(),
+                    )).then((value) => again());
+              }
+
+              // again();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  //回答部分を表示する
+  Widget _ansArea(double h, double w) {
+    return Container(
+      // margin: EdgeInsets.all(8.0),
+      height: h,
+      width: w,
+      color: Colors.red,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          _ansMusicArea(h, w / 2),
+          _ansSelectArea(h, w / 2),
+        ],
+      ),
+    );
+  }
+
 //画面が作られた時に1度だけ呼ばれる．
   @override
   void initState() {
     super.initState();
     //ログを有効にする？
     // AudioPlayer.logEnabled = true;
+    playerIsComplation();
+
     fetchMusicName();
     ansindex();
   }
 
   Widget build(BuildContext context) {
+    final double deviceHeight =
+        MediaQuery.of(context).size.height - kToolbarHeight;
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    AppBar appBar = AppBar(
+        centerTitle: true,
+        title: Text("第$question問"),
+        automaticallyImplyLeading: false);
     if (isLoading) {
-      // return const CircularProgressIndicator();
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Loading..."),
-          automaticallyImplyLeading: false,
-        ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Text("Loading data..."),
               CircularProgressIndicator(),
               SizedBox(
-                height: 15,
+                height: 10,
               ),
               LinearProgressIndicator(),
+              // Text("Hello"),
+              Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SizedBox(
+                    // width: 250.0,
+                    height: 30.0,
+                    child: DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                      ),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          FadeAnimatedText("Loading..."),
+                        ],
+                        isRepeatingAnimation: true,
+                        repeatForever: true,
+                      ),
+                    ),
+                  ))
             ],
           ),
         ),
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: Text("Music Memory"),
-            automaticallyImplyLeading: false),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-              Widget>[
-            Text("第$question問"),
-            ElevatedButton(
-              child: Icon(Icons.play_arrow),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-                onPrimary: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                stopMusic();
-                playMusic(0);
-              },
-            ),
-            Text(""),
-            Text("同じメロディはどれ？"),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              ElevatedButton(
-                child: Text("A"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.yellow,
-                  onPrimary: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  playMusic(1);
-                },
-              ),
-              ElevatedButton(
-                child: Text("B"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.lightGreen,
-                  onPrimary: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  playMusic(2);
-                },
-              ),
-              ElevatedButton(
-                child: Text("C"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.teal,
-                  onPrimary: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  playMusic(3);
-                },
-              ),
-              ElevatedButton(
-                child: Text("D"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  onPrimary: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  playMusic(4);
-                },
-              ),
+        appBar: appBar,
+        // appBar: AppBar(
+        //     centerTitle: true,
+        //     title: Text("第$question問"),
+        //     automaticallyImplyLeading: false),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(children: <Widget>[
+              _questionArea((deviceHeight - 2 * 8.0) * 0.3),
+              _questionTextArea(),
+              _ansArea((deviceHeight - 2 * 8.0) * 0.5, deviceWidth - 2 * 8.0),
             ]),
-            Text(""),
-            Text("答え"),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              ElevatedButton(
-                child: Text("A"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.yellow,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  timeAns.stop();
-                  startAns = false;
-                  if (judge(0)) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageCorrect(),
-                        )).then((value) => again());
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageWrong(),
-                        )).then((value) => again());
-                  }
-                  // again();
-                },
-              ),
-              ElevatedButton(
-                child: Text("B"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.lightGreen,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  timeAns.stop();
-                  startAns = false;
-                  if (judge(1)) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageCorrect(),
-                        )).then((value) => again());
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageWrong(),
-                        )).then((value) => again());
-                  }
-                  // again();
-                },
-              ),
-              ElevatedButton(
-                child: Text("C"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  timeAns.stop();
-                  startAns = false;
-                  if (judge(2)) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageCorrect(),
-                        )).then((value) => again());
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageWrong(),
-                        )).then((value) => again());
-                  }
-                  // again();
-                },
-              ),
-              ElevatedButton(
-                child: Text("D"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  stopMusic();
-                  timeAns.stop();
-                  startAns = false;
-                  if (judge(3)) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageCorrect(),
-                        )).then((value) => again());
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPageWrong(),
-                        )).then((value) => again());
-                  }
-
-                  // again();
-                },
-              ),
-            ]),
-          ]),
+          ),
         ),
       );
     }
-    // body: Center(
-    //   child: Text(
-    //     nameString,
-    //   ),
-    // ));
   }
 }
