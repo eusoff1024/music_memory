@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:music_memory/main.dart';
 
@@ -8,7 +9,38 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //入力したユーザーid
   String userId = "";
+  //firebase firestoreのインスタンス作成
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  //FirebaseStorageからusersのドキュメント一覧を取得
+  Future<void> listUsers() async {
+    //usersのドキュメント一覧を取得
+    await firestore.collection('users').get().then((QuerySnapshot ds) {
+      print(ds.docs);
+    });
+
+    // loadFile();
+
+    // for (int i = 0; i < 5; i++) {
+    //   loadFile(i);
+    // }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // listUsers();
+    // //ログを有効にする？
+    // // AudioPlayer.logEnabled = true;
+    // playerIsComplation();
+
+    // fetchMusicName();
+    // ansindex();
+  }
 
   @override
   Widget build(BuildContext context) {
