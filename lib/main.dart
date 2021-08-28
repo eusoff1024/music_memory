@@ -400,11 +400,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _questionArea(double h, double w) {
     return Container(
       alignment: Alignment(0, 0),
-      // color: Colors.white,
+      // color: Colors.red,
       child: isPlaying[0]
           //音楽再生時(avatar_glow表示)
           ? AvatarGlow(
-              endRadius: h / 3,
+              endRadius: h / 2,
               glowColor: Colors.blue,
               duration: Duration(milliseconds: 1500),
               repeat: true,
@@ -418,9 +418,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     backgroundColor: Colors.white,
                     child: Image.asset(
                       'images/image1.png',
-                      height: h / 5,
+                      height: h / 4,
                     ),
-                    radius: h / 5,
+                    radius: h / 4,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -435,59 +435,60 @@ class _MyHomePageState extends State<MyHomePage> {
             )
 
           //音楽非再生時(avatar_glow非表示)
-          : ElevatedButton(
-              child: Material(
-                elevation: 8.0,
-                shape: CircleBorder(),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Image.asset(
-                    'images/image1.png',
-                    height: h / 5,
+          : Padding(
+              padding: EdgeInsets.all(h / 4),
+              child: ElevatedButton(
+                child: Material(
+                  elevation: 8.0,
+                  shape: CircleBorder(),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Image.asset(
+                      'images/image1.png',
+                      height: h / 4,
+                    ),
+                    radius: h / 4,
                   ),
-                  radius: h / 5,
                 ),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.black,
+                    shape: CircleBorder()),
+                onPressed: () {
+                  stopMusic();
+                  playMusic(0);
+                },
               ),
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  onPrimary: Colors.black,
-                  shape: CircleBorder()),
-              onPressed: () {
-                stopMusic();
-                playMusic(0);
-              },
             ),
     );
   }
 
-  // //説明文を表示する
+  // // //説明文を表示する
   // Widget _questionTextArea() {
   //   return Container(
   //     alignment: Alignment.center,
-  //     color: Colors.amber,
-  //     child: Text("同じものはどれ？"),
+  //     // color: Colors.amber,
+  //     child: Text("Q.$question"),
   //   );
   // }
 
   //回答の音楽データの選択肢を表示する
   Widget _ansMusicArea(double h, double w) {
+    //４分割にする
+    h = h / 4;
     return Container(
-        // color: Colors.white,
+        // color: Colors.green,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-          // SizedBox(
-          //   height: h / 5,
-          //   width: w,
-          //   child: true
           Container(
-            height: h / 4,
+            height: h,
             width: w,
-            // color: Colors.white,
+            // color: Colors.blue,
             child: isPlaying[1]
                 ? AvatarGlow(
-                    endRadius: h / 7,
+                    endRadius: h / 2,
                     glowColor: Colors.red,
                     duration: Duration(milliseconds: 1500),
                     repeat: true,
@@ -495,15 +496,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     repeatPauseDuration: Duration(milliseconds: 0),
                     child: ElevatedButton(
                       child: Material(
-                        // elevation: 8.0,
+                        elevation: 8.0,
                         shape: CircleBorder(),
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Image.asset(
                             'images/image2.png',
-                            height: h / 8,
+                            height: h / 4,
                           ),
-                          radius: h / 12,
+                          radius: h / 4,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -516,36 +517,39 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   )
-                : ElevatedButton(
-                    child: Material(
-                      // elevation: 8.0,
-                      shape: CircleBorder(),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Image.asset(
-                          'images/image2.png',
-                          height: h / 8,
+                : Padding(
+                    padding: EdgeInsets.all(h / 4),
+                    child: ElevatedButton(
+                      child: Material(
+                        elevation: 8.0,
+                        shape: CircleBorder(),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Image.asset(
+                            'images/image2.png',
+                            height: h / 4,
+                          ),
+                          radius: h / 4,
                         ),
-                        radius: h / 12,
                       ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        // onPrimary: Colors.black,
+                        shape: CircleBorder(),
+                      ),
+                      onPressed: () {
+                        stopMusic();
+                        playMusic(1);
+                      },
                     ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      // onPrimary: Colors.black,
-                      shape: CircleBorder(),
-                    ),
-                    onPressed: () {
-                      stopMusic();
-                      playMusic(1);
-                    },
                   ),
           ),
           Container(
-            height: h / 4,
+            height: h,
             width: w,
             child: isPlaying[2]
                 ? AvatarGlow(
-                    endRadius: h / 7,
+                    endRadius: h / 2,
                     glowColor: Colors.yellow,
                     duration: Duration(milliseconds: 1500),
                     repeat: true,
@@ -553,15 +557,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     repeatPauseDuration: Duration(milliseconds: 0),
                     child: ElevatedButton(
                       child: Material(
-                        // elevation: 8.0,
+                        elevation: 8.0,
                         shape: CircleBorder(),
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Image.asset(
                             'images/image3.png',
-                            height: h / 8,
+                            height: h / 4,
                           ),
-                          radius: h / 12,
+                          radius: h / 4,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -574,36 +578,39 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   )
-                : ElevatedButton(
-                    child: Material(
-                      // elevation: 8.0,
-                      shape: CircleBorder(),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Image.asset(
-                          'images/image3.png',
-                          height: h / 8,
+                : Padding(
+                    padding: EdgeInsets.all(h / 4),
+                    child: ElevatedButton(
+                      child: Material(
+                        elevation: 8.0,
+                        shape: CircleBorder(),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Image.asset(
+                            'images/image3.png',
+                            height: h / 4,
+                          ),
+                          radius: h / 4,
                         ),
-                        radius: h / 12,
                       ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          // onPrimary: Colors.black,
+                          shape: CircleBorder()),
+                      onPressed: () {
+                        stopMusic();
+                        playMusic(2);
+                      },
                     ),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        // onPrimary: Colors.black,
-                        shape: CircleBorder()),
-                    onPressed: () {
-                      stopMusic();
-                      playMusic(2);
-                    },
                   ),
           ),
 
           Container(
-            height: h / 4,
+            height: h,
             width: w,
             child: isPlaying[3]
                 ? AvatarGlow(
-                    endRadius: h / 7,
+                    endRadius: h / 2,
                     glowColor: Colors.green,
                     duration: Duration(milliseconds: 1500),
                     repeat: true,
@@ -611,15 +618,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     repeatPauseDuration: Duration(milliseconds: 0),
                     child: ElevatedButton(
                       child: Material(
-                        // elevation: 8.0,
+                        elevation: 8.0,
                         shape: CircleBorder(),
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Image.asset(
                             'images/image4.png',
-                            height: h / 8,
+                            height: h / 4,
                           ),
-                          radius: h / 12,
+                          radius: h / 4,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -632,35 +639,38 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   )
-                : ElevatedButton(
-                    child: Material(
-                      // elevation: 8.0,
-                      shape: CircleBorder(),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Image.asset(
-                          'images/image4.png',
-                          height: h / 8,
+                : Padding(
+                    padding: EdgeInsets.all(h / 4),
+                    child: ElevatedButton(
+                      child: Material(
+                        elevation: 8.0,
+                        shape: CircleBorder(),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Image.asset(
+                            'images/image4.png',
+                            height: h / 4,
+                          ),
+                          radius: h / 4,
                         ),
-                        radius: h / 12,
                       ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          // onPrimary: Colors.black,
+                          shape: const CircleBorder()),
+                      onPressed: () {
+                        stopMusic();
+                        playMusic(3);
+                      },
                     ),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        // onPrimary: Colors.black,
-                        shape: const CircleBorder()),
-                    onPressed: () {
-                      stopMusic();
-                      playMusic(3);
-                    },
                   ),
           ),
           Container(
-            height: h / 4,
+            height: h,
             width: w,
             child: isPlaying[4]
                 ? AvatarGlow(
-                    endRadius: h / 7,
+                    endRadius: h / 2,
                     glowColor: Colors.cyan,
                     duration: Duration(milliseconds: 1500),
                     repeat: true,
@@ -668,15 +678,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     repeatPauseDuration: Duration(milliseconds: 0),
                     child: ElevatedButton(
                       child: Material(
-                        // elevation: 8.0,
+                        elevation: 8.0,
                         shape: CircleBorder(),
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Image.asset(
                             'images/image5.png',
-                            height: h / 8,
+                            height: h / 4,
                           ),
-                          radius: h / 12,
+                          radius: h / 4,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -689,27 +699,30 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   )
-                : ElevatedButton(
-                    child: Material(
-                      // elevation: 8.0,
-                      shape: CircleBorder(),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Image.asset(
-                          'images/image5.png',
-                          height: h / 8,
+                : Padding(
+                    padding: EdgeInsets.all(h / 4),
+                    child: ElevatedButton(
+                      child: Material(
+                        elevation: 8.0,
+                        shape: CircleBorder(),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Image.asset(
+                            'images/image5.png',
+                            height: h / 4,
+                          ),
+                          radius: h / 4,
                         ),
-                        radius: h / 12,
                       ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          // onPrimary: Colors.black,
+                          shape: const CircleBorder()),
+                      onPressed: () {
+                        stopMusic();
+                        playMusic(4);
+                      },
                     ),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        // onPrimary: Colors.black,
-                        shape: const CircleBorder()),
-                    onPressed: () {
-                      stopMusic();
-                      playMusic(4);
-                    },
                   ),
           ),
           // ]
@@ -1079,8 +1092,15 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 height: deviceHeight * 0.2,
                 width: deviceWidth,
-                child: _questionArea((deviceHeight) * 0.3, deviceWidth),
+                child: _questionArea(deviceHeight * 0.2, deviceWidth),
               ),
+
+              // //第何問か表示させるwidget
+              // SizedBox(
+              //   height: deviceHeight * 0.05,
+              //   width: deviceWidth,
+              //   child: _questionTextArea(),
+              // ),
 
               //回答部分を表示させるwidget
               Row(
@@ -1091,14 +1111,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: deviceWidth / 2,
                       // child: _ansArea((deviceHeight - 2 * 8.0) * 0.5, deviceWidth - 2 * 8.0)
                       child:
-                          _ansMusicArea(deviceHeight * 0.5, deviceWidth / 2)),
+                          _ansMusicArea(deviceHeight * 0.58, deviceWidth / 2)),
 
                   //回答選択部分
                   SizedBox(
                       height: deviceHeight * 0.6,
                       width: deviceWidth / 2,
                       child:
-                          _ansSelectArea(deviceHeight * 0.5, deviceWidth / 2)),
+                          _ansSelectArea(deviceHeight * 0.58, deviceWidth / 2)),
                   // )
                 ],
               ),
