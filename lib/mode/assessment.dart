@@ -27,6 +27,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
   var downloadURLs = ['null', 'null', 'null', 'null', 'null'];
   //正解の添字
   int ans = 0;
+
   //自分の回答の添字
   int myAns = 0;
   //ドキュメント情報を入れるリスト
@@ -146,7 +147,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     }
   }
 
-  //答えの添字をランダムで取得(downloadURLsから)
+  // //答えの添字をランダムで取得(downloadURLsから)
   void ansindex() {
     var r = new Random();
     ans = r.nextInt(4);
@@ -330,49 +331,49 @@ class _AssessmentPageState extends State<AssessmentPage> {
     CollectionReference usersCollectionReference =
         firestore.collection('users');
 
-    final doc = await usersCollectionReference.doc(_userId).get();
+    // final doc = await usersCollectionReference.doc(_userId).get();
 
-    //新規ユーザ
-    if (!doc.exists) {
-      //何回目か
-      int numberExperiments = 1;
-      await usersCollectionReference.doc(_userId).set({
-        'day': numberExperiments,
-        'result$numberExperiments': {
-          'name': _userId,
-          'sumAns': question - 1,
-          'sumCorrectAns': countCorrect,
-          'countTapping': countTapping,
-          'ansDay': todayis,
-          'timePlayMusic': timePlayMusic.elapsed.inSeconds,
-          'timeAns': timeAns.elapsed.inSeconds
-        }
-      });
+    // //新規ユーザ
+    // if (!doc.exists) {
+    //   //何回目か
+    //   int numberExperiments = 1;
+    //   await usersCollectionReference.doc(_userId).set({
+    //     'day': numberExperiments,
+    //     'result$numberExperiments': {
+    //       'name': _userId,
+    //       'sumAns': question - 1,
+    //       'sumCorrectAns': countCorrect,
+    //       'countTapping': countTapping,
+    //       'ansDay': todayis,
+    //       'timePlayMusic': timePlayMusic.elapsed.inSeconds,
+    //       'timeAns': timeAns.elapsed.inSeconds
+    //     }
+    //   });
 
-      //既存のユーザ
-    } else {
-      int numberExperiments = 1;
-      //現在の実験回数を取得
-      await usersCollectionReference
-          .doc(_userId)
-          .get()
-          .then((DocumentSnapshot ds) {
-        numberExperiments = ds.get('day');
-      });
-      numberExperiments += 1;
-      await usersCollectionReference.doc(_userId).update({
-        'day': numberExperiments,
-        'result$numberExperiments': {
-          'name': _userId,
-          'sumAns': question - 1,
-          'sumCorrectAns': countCorrect,
-          'countTapping': countTapping,
-          'ansDay': todayis,
-          'timePlayMusic': timePlayMusic.elapsed.inSeconds,
-          'timeAns': timeAns.elapsed.inSeconds
-        }
-      });
-    }
+    //   //既存のユーザ
+    // } else {
+    int numberExperiments = 1;
+    //現在の実験回数を取得
+    await usersCollectionReference
+        .doc(_userId)
+        .get()
+        .then((DocumentSnapshot ds) {
+      numberExperiments = ds.get('day');
+    });
+    numberExperiments += 1;
+    await usersCollectionReference.doc(_userId).update({
+      'day': numberExperiments,
+      'result$numberExperiments': {
+        'name': _userId,
+        'sumAns': question - 1,
+        'sumCorrectAns': countCorrect,
+        'countTapping': countTapping,
+        'ansDay': todayis,
+        'timePlayMusic': timePlayMusic.elapsed.inSeconds,
+        'timeAns': timeAns.elapsed.inSeconds
+      }
+    });
+    // }
 
     print("DONE");
   }

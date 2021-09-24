@@ -27,14 +27,18 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
   var downloadURLs = ['null', 'null', 'null', 'null', 'null'];
   //正解の添字
   int ans = 0;
+  // 各問題における正解の添字
+  var anslist = [1, 0, 0, 3, 0, 3, 1, 3, 1, 0, 1, 1, 3, 0, 0, 1, 2, 2, 3, 0];
   //自分の回答の添字
   int myAns = 0;
   //ドキュメント情報を入れるリスト
   var listMusicName = [];
   //何問目か
   int question = 1;
-  //現在のレベル
-  int level = 1;
+  // //現在のレベル
+  // int level = 1;
+  // レベルを保存するリスト
+  var levels = [];
   // 正答数
   int countCorrect = 0;
   //firebase firestoreのインスタンス作成
@@ -76,6 +80,24 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
       print(listMusicName);
     });
 
+    // listExample();
+    fetchLevels();
+
+    setState(() {});
+  }
+
+  // levelsを取得
+  Future<void> fetchLevels() async {
+    CollectionReference collectionReference =
+        firestore.collection('question_senior_thesis');
+    await collectionReference
+        .doc('gDbddyxQ8jFrCiOyWR2X')
+        .get()
+        .then((DocumentSnapshot ds) {
+      levels = ds.get('levels');
+      print(levels);
+    });
+
     listExample();
 
     setState(() {});
@@ -85,6 +107,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
   Future<void> listExample() async {
     //問題の音源のURL取得
     String fileName = listMusicName[ans].toString().trim();
+    int level = levels[question - 1];
     await firebase_storage.FirebaseStorage.instance
         .ref('level1/$fileName.mp3')
         .getDownloadURL()
@@ -148,8 +171,9 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
 
   //答えの添字をランダムで取得(downloadURLsから)
   void ansindex() {
-    var r = new Random();
-    ans = r.nextInt(4);
+    // var r = new Random();
+    // ans = r.nextInt(4);
+    ans = anslist[question - 1];
     setState(() {});
   }
 
@@ -284,15 +308,15 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
     print("答え：$myans 正解：$ans");
     if (judge(myans)) {
       print("◯");
-      level++;
-      level = min(4, level);
+      // level++;
+      // level = min(4, level);
       countCorrect++;
       print(countCorrect);
       setState(() {});
     } else {
       print("x");
-      level--;
-      level = max(1, level);
+      // level--;
+      // level = max(1, level);
       setState(() {});
     }
   }
@@ -301,7 +325,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
   void again() {
     stopMusic();
     question++;
-    if (question > 4) {
+    if (question > 2) {
       uploadlogdata();
       Navigator.push(
           context,
@@ -328,51 +352,51 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
   //回答をfirestore databaseに保存
   Future<void> uploadlogdata() async {
     CollectionReference usersCollectionReference =
-        firestore.collection('users');
+        firestore.collection('users_senior_thesis');
 
-    final doc = await usersCollectionReference.doc(_userId).get();
+    // final doc = await usersCollectionReference.doc(_userId).get();
 
-    //新規ユーザ
-    if (!doc.exists) {
-      //何回目か
-      int numberExperiments = 1;
-      await usersCollectionReference.doc(_userId).set({
-        'day': numberExperiments,
-        'result$numberExperiments': {
-          'name': _userId,
-          'sumAns': question - 1,
-          'sumCorrectAns': countCorrect,
-          'countTapping': countTapping,
-          'ansDay': todayis,
-          'timePlayMusic': timePlayMusic.elapsed.inSeconds,
-          'timeAns': timeAns.elapsed.inSeconds
-        }
-      });
+    // //新規ユーザ
+    // if (!doc.exists) {
+    //   //何回目か
+    //   int numberExperiments = 1;
+    //   await usersCollectionReference.doc(_userId).set({
+    //     'day': numberExperiments,
+    //     'result$numberExperiments': {
+    //       'name': _userId,
+    //       'sumAns': question - 1,
+    //       'sumCorrectAns': countCorrect,
+    //       'countTapping': countTapping,
+    //       'ansDay': todayis,
+    //       'timePlayMusic': timePlayMusic.elapsed.inSeconds,
+    //       'timeAns': timeAns.elapsed.inSeconds
+    //     }
+    //   });
 
-      //既存のユーザ
-    } else {
-      int numberExperiments = 1;
-      //現在の実験回数を取得
-      await usersCollectionReference
-          .doc(_userId)
-          .get()
-          .then((DocumentSnapshot ds) {
-        numberExperiments = ds.get('day');
-      });
-      numberExperiments += 1;
-      await usersCollectionReference.doc(_userId).update({
-        'day': numberExperiments,
-        'result$numberExperiments': {
-          'name': _userId,
-          'sumAns': question - 1,
-          'sumCorrectAns': countCorrect,
-          'countTapping': countTapping,
-          'ansDay': todayis,
-          'timePlayMusic': timePlayMusic.elapsed.inSeconds,
-          'timeAns': timeAns.elapsed.inSeconds
-        }
-      });
-    }
+    //   //既存のユーザ
+    // } else {
+    int numberExperiments = 1;
+    //現在の実験回数を取得
+    await usersCollectionReference
+        .doc(_userId)
+        .get()
+        .then((DocumentSnapshot ds) {
+      numberExperiments = ds.get('day');
+    });
+    numberExperiments += 1;
+    await usersCollectionReference.doc(_userId).update({
+      'day': numberExperiments,
+      'result$numberExperiments': {
+        'name': _userId,
+        'sumAns': question - 1,
+        'sumCorrectAns': countCorrect,
+        'countTapping': countTapping,
+        'ansDay': todayis,
+        'timePlayMusic': timePlayMusic.elapsed.inSeconds,
+        'timeAns': timeAns.elapsed.inSeconds
+      }
+    });
+    // }
 
     print("DONE");
   }
