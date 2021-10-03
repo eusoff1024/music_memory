@@ -58,61 +58,63 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         // appBar: AppBar(
         //   title: Text("ログイン"),
         // ),
         body: Center(
             child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        //ユーザーの入力フォーム
-        Padding(
-            padding: EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
-            child: TextFormField(
-              decoration: InputDecoration(labelText: "ユーザー名"),
-              onChanged: (String value) {
-                userId = value;
-              },
-            )),
-        SizedBox(
-          height: 30,
-        ),
-        ElevatedButton(
-          child: Text("ログイン"),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            onPrimary: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            //ユーザーの入力フォーム
+            Padding(
+                padding: EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
+                child: TextFormField(
+                  decoration: InputDecoration(labelText: "ユーザー名"),
+                  onChanged: (String value) {
+                    userId = value;
+                  },
+                )),
+            SizedBox(
+              height: 30,
             ),
-          ),
-          onPressed: () {
-            if (canAccess()) {
-              print("can");
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    // builder: (context) => MyHomePage(userId: userId.toString()),
-                    // builder: (context) =>
-                    //     TrainingPage(userId: userId.toString()),
-                    builder: (context) => MenuPage(userId: userId.toString()),
-                  ));
-            } else {
-              print("can't");
-              print(userId);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPageWrong(),
-                  )).then((value) {
-                print(userId);
-              });
+            ElevatedButton(
+              child: Text("ログイン"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white,
+                onPrimary: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                if (canAccess()) {
+                  print("can");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        // builder: (context) => MyHomePage(userId: userId.toString()),
+                        // builder: (context) =>
+                        //     TrainingPage(userId: userId.toString()),
+                        builder: (context) =>
+                            MenuPage(userId: userId.toString()),
+                      ));
+                } else {
+                  print("can't");
+                  print(userId);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginPageWrong(),
+                      )).then((value) {
+                    print(userId);
+                  });
 
-              // print(userId);
-            }
-          },
-        ),
-      ],
-    )));
+                  // print(userId);
+                }
+              },
+            ),
+          ],
+        )));
   }
 }

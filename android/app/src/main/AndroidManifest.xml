@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.eusoff.music_memory">
    <application
-        android:label="music_memory"
+        android:label="Music Memory"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

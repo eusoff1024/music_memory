@@ -331,6 +331,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
           context,
           MaterialPageRoute(
             builder: (context) => LastPage(countCorrect, question - 1),
+            // builder: (context) => LastPage(_userId),
           ));
     } else {
       rebuild();
@@ -831,6 +832,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
             child: ElevatedButton(
               child: Text("選択する"),
               style: ElevatedButton.styleFrom(
+                fixedSize: Size(w * 0.8, h / 9),
                 primary: Colors.white,
                 onPrimary: Colors.black,
                 shape: RoundedRectangleBorder(
@@ -858,6 +860,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
             child: ElevatedButton(
               child: Text("選択する"),
               style: ElevatedButton.styleFrom(
+                fixedSize: Size(w * 0.8, h / 9),
                 primary: Colors.white,
                 onPrimary: Colors.black,
                 shape: RoundedRectangleBorder(
@@ -885,6 +888,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
             child: ElevatedButton(
               child: Text("選択する"),
               style: ElevatedButton.styleFrom(
+                fixedSize: Size(w * 0.8, h / 9),
                 primary: Colors.white,
                 onPrimary: Colors.black,
                 shape: RoundedRectangleBorder(
@@ -912,6 +916,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
             child: ElevatedButton(
               child: Text("選択する"),
               style: ElevatedButton.styleFrom(
+                fixedSize: Size(w * 0.8, h / 9),
                 primary: Colors.white,
                 onPrimary: Colors.black,
                 shape: RoundedRectangleBorder(
