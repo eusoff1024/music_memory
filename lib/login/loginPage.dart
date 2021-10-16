@@ -19,9 +19,21 @@ class _LoginPageState extends State<LoginPage> {
 
   //FirebaseStorageからusersのドキュメント一覧を取得
   Future<void> listUsers() async {
-    //usersのドキュメント一覧を取得
+    // トレーニング用
+    // //usersのドキュメント一覧を取得
+    // await firestore
+    //     .collection('users')
+    //     .get()
+    //     .then((QuerySnapshot querySnapshot) {
+    //   querySnapshot.docs.forEach((doc) {
+    //     listUserId.add(doc.id);
+    //   });
+    // });
+
+    // 卒論用
+    //FirebaseStorageからusers_senior_thesisのドキュメント一覧を取得
     await firestore
-        .collection('users')
+        .collection('users_senior_thesis')
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {

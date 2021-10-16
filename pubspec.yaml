@@ -25,6 +25,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # open url in browser
+  url_launcher: ^6.0.12
   
   #audioplayer
   audioplayers: ^0.19.1
