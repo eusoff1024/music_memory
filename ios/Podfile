@@ -3,6 +3,17 @@
 platform :ios, '10.6'
 
 
+# add the Firebase pod for Google Analytics
+pod 'Firebase/Analytics'
+# or pod ‘Firebase/AnalyticsWithoutAdIdSupport’
+# for Analytics without IDFA collection capability
+
+
+
+
+# add pods for any other desired Firebase products
+# https://firebase.google.com/docs/ios/setup#available-pods
+
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
