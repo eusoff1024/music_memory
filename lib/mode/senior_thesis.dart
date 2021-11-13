@@ -32,6 +32,8 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
   //自分の回答の添字
   int myAns = 0;
   //ドキュメント情報を入れるリスト
+  var listMusicNames = [];
+  // どの問題音源を使うか保存するリスト
   var listMusicName = [];
   //何問目か
   int question = 1;
@@ -69,18 +71,33 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
   //回答を確認するかどうか
   bool confirmAns = false;
 
-  //ドキュメント一覧を取得
-  Future<void> fetchMusicName() async {
-    CollectionReference collectionReference = firestore.collection('mm_test');
+  // // トレーニング用
+  // //ドキュメント一覧を取得
+  // Future<void> fetchMusicName() async {
+  //   CollectionReference collectionReference = firestore.collection('mm_test');
+  //   await collectionReference
+  //       .doc('WtehTwdnUPRrWqKLvXkm')
+  //       .get()
+  //       .then((DocumentSnapshot ds) {
+  //     listMusicName = ds.get('test$question');
+  //     print(listMusicName);
+  //   });
+
+  // 卒論用
+  // ドキュメント一覧を取得
+  Future<void> fetchMusicNames() async {
+    CollectionReference collectionReference =
+        firestore.collection('music_names_list');
     await collectionReference
-        .doc('WtehTwdnUPRrWqKLvXkm')
+        .doc('Q6MJKw8FBIxJjuz2PDSV')
         .get()
         .then((DocumentSnapshot ds) {
-      listMusicName = ds.get('test$question');
-      print(listMusicName);
+      // music1,music2...music41(作成した音源の最大数)が保存される
+      listMusicNames = ds.get('names');
+      print(listMusicNames);
     });
+    print(listMusicNames.length);
 
-    // listExample();
     fetchLevels();
 
     setState(() {});
@@ -98,6 +115,42 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
       print(levels);
     });
 
+    fetchMusicName();
+
+    // listExample();
+
+    setState(() {});
+  }
+
+  // listMusicNamesからランダムで音源を４つ選びlistusicNameに保存
+  void fetchMusicName() {
+    var index = [];
+    bool check = false;
+    for (int i = 0; i < 4;) {
+      int tmp = Random().nextInt(listMusicNames.length);
+
+      // 重複の確認
+      for (int j = 0; j < index.length; j++) {
+        // 重複の場合
+        if (tmp == index[j]) {
+          check = true;
+          break;
+        }
+      }
+
+      if (check) {
+        // 重複されている場合
+        check = false;
+        continue;
+      } else {
+        // 重複されていない場合
+        index.add(tmp);
+        i++;
+        listMusicName.add(listMusicNames[tmp]);
+      }
+    }
+
+    // fetchLevels();
     listExample();
 
     setState(() {});
@@ -109,7 +162,7 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
     String fileName = listMusicName[ans].toString().trim();
     int level = levels[question - 1];
     await firebase_storage.FirebaseStorage.instance
-        .ref('level1/$fileName.mp3')
+        .ref('level1/$fileName.wav')
         .getDownloadURL()
         .then((value) async => downloadURLs[0] = value);
 
@@ -117,12 +170,10 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
     for (int j = 1; j < 5; j++) {
       String fileName = listMusicName[j - 1].toString().trim();
       await firebase_storage.FirebaseStorage.instance
-          .ref('level$level/$fileName.mp3')
+          .ref('level$level/$fileName.wav')
           .getDownloadURL()
           .then((value) async => downloadURLs[j] = value);
     }
-
-    // loadFile();
 
     for (int i = 0; i < 5; i++) {
       loadFile(i);
@@ -171,9 +222,9 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
 
   //答えの添字をランダムで取得(downloadURLsから)
   void ansindex() {
-    // var r = new Random();
-    // ans = r.nextInt(4);
-    ans = anslist[question - 1];
+    var r = new Random();
+    ans = r.nextInt(4);
+    // ans = anslist[question - 1];
     setState(() {});
   }
 
@@ -209,8 +260,12 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
       if (player0.state == PlayerState.STOPPED ||
           player0.state == PlayerState.COMPLETED) {
         player0.play(downloadURLs[0]);
-        countTapping[0]++;
-        timePlayMusic.start();
+        // 回答中のみタッピング回数と再生時間を測る
+        if (!confirmAns) {
+          countTapping[0]++;
+          timePlayMusic.start();
+        }
+
         setState(() {
           isPlaying[0] = true;
         });
@@ -219,8 +274,11 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
       if (player1.state == PlayerState.STOPPED ||
           player1.state == PlayerState.COMPLETED) {
         player1.play(downloadURLs[1]);
-        countTapping[1]++;
-        timePlayMusic.start();
+        if (!confirmAns) {
+          countTapping[1]++;
+          timePlayMusic.start();
+        }
+
         setState(() {
           isPlaying[1] = true;
         });
@@ -229,9 +287,11 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
       if (player2.state == PlayerState.STOPPED ||
           player2.state == PlayerState.COMPLETED) {
         player2.play(downloadURLs[2]);
-        // countTapping++;
-        countTapping[2]++;
-        timePlayMusic.start();
+        if (!confirmAns) {
+          countTapping[2]++;
+          timePlayMusic.start();
+        }
+
         setState(() {
           isPlaying[2] = true;
         });
@@ -240,9 +300,11 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
       if (player3.state == PlayerState.STOPPED ||
           player3.state == PlayerState.COMPLETED) {
         player3.play(downloadURLs[3]);
-        // countTapping++;
-        countTapping[3]++;
-        timePlayMusic.start();
+        if (!confirmAns) {
+          countTapping[3]++;
+          timePlayMusic.start();
+        }
+
         setState(() {
           isPlaying[3] = true;
         });
@@ -251,9 +313,11 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
       if (player4.state == PlayerState.STOPPED ||
           player4.state == PlayerState.COMPLETED) {
         player4.play(downloadURLs[4]);
-        // countTapping++;
-        countTapping[4]++;
-        timePlayMusic.start();
+        if (!confirmAns) {
+          countTapping[4]++;
+          timePlayMusic.start();
+        }
+
         setState(() {
           isPlaying[4] = true;
         });
@@ -952,8 +1016,8 @@ class _SeniorThesisPageState extends State<SeniorThesisPage> {
     // AudioPlayer.logEnabled = true;
     playerIsComplation();
 
-    fetchMusicName();
     ansindex();
+    fetchMusicNames();
   }
 
   Widget build(BuildContext context) {
